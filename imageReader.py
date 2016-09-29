@@ -5,6 +5,7 @@
 # Author: Eduardo Rodes Pastor                                                    #
 #*********************************************************************************#
 from PIL import Image
+import array 
 
 #***********************************************************************#
 #	Function getImageData: This gets the width and height of an     #
@@ -70,4 +71,33 @@ def RGBtoYUV(r, g, b): # in (0,255) range
 		cr[i] = int(128 + 0.5 * r[i] - 0.418688 * g[i] - 0.081312 * b[i])
 
 	return y, cb, cr
+
+#*********************************************************************************#
+#	Function getYUV: This gets the YUV values from a YUV file and saves       #
+#	them in three lists from a given file.                                    #
+#	Input: file, number of pixels of the file                                 #
+#	Output: y [], u [], v []                                                  #
+#*********************************************************************************#
+def getYUV(filename, width, height):
+
+	y = array.array('B')
+	u = array.array('B')
+	v = array.array('B')
+
+	f_y = open(filename, "rb")
+	f_uv = open(filename, "rb")
+	f_uv.seek(width*height, 1)
+
+	for i in range(0, height/2):
+		for j in range(0, width/2):
+			u.append(ord(f_uv.read(1)));
+			v.append(ord(f_uv.read(1)));
+
+	for i in range(0,height):
+		for j in range(0, width):
+			y.append(ord(f_y.read(1)));
+			
+
+	return y, u, v
+
 
