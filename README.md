@@ -18,10 +18,17 @@ This is a python PSNR calculator tool
 3. Go to the path where example.py is and execute it with the command:
 
   ```
-  python main.py path_original_image path_encoded_image
+  python main.py path_original_image path_original_image_yuv_format path_encoded_image_yuv_format
   ```
 
 
 ## Example
 
   python main.py ./lena.bmp ./lenadec.bmp
+
+##More
+
+There are some scripts in Scripts folder:
+
+*transform_to_yuv* : it allows to transform all the images from a directory into yuv format images
+*test_psnr_yuv*: it allows to encode all the images from a yuv directory into images with .lhe format (using ffmpeg). In addition, it saves the statistics of bpp, runtime and psnr into results file.
