@@ -24,7 +24,7 @@ This is a python PSNR calculator tool
 
 ## Example
 
-  python main.py ./lena.bmp ./lenadec.bmp
+  python main.py lena.bmp lena.yuv lena_jpeg.yuv
 
 ##More
 
@@ -32,3 +32,10 @@ There are some scripts in Scripts folder:
 
 *transform_to_yuv* : it allows to transform all the images from a directory into yuv format images
 *test_psnr_yuv*: it allows to encode all the images from a yuv directory into images with .lhe format (using ffmpeg). In addition, it saves the statistics of bpp, runtime and psnr into results file.
+
+##yuv_nv12_viewer
+Usage:
+
+  ```
+  python yuv_nv12_viewer.py image.yuv width height
+  ```
