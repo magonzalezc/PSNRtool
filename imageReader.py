@@ -1,73 +1,70 @@
-#*********************************************************************************#
+# *********************************************************************************#
 # ImageReader Class                                                               #
 # This class contains the methods to read the image data                          #
 # Author: Marina Gonzalez                                                         #
 # Author: Eduardo Rodes Pastor                                                    #
-#*********************************************************************************#
+# *********************************************************************************#
 from PIL import Image
 
-#***********************************************************************#
-#	Function getImageData: This gets the width and height of an     #
-#	image (in pixels) and the total number of pixels of it.         #
-#	Input: image file                                               #
-#	Output: width (pixels), height (pixels), number of pixels       #
-#***********************************************************************#
-def getImageData(filename):
+
+def get_image_data(filename):
+    """
+    This gets the width and height of an image (in pixels) and the total number of pixels of it.
+    :param filename: image file
+    :return: width, height, number of pixels
+    """
+    im = Image.open(filename)
+    width = im.size[0]
+    height = im.size[1]
+    npix = im.size[0] * im.size[1]
+
+    return width, height, npix
 
 
-	im = Image.open(filename)
-	width = im.size[0]
-	height = im.size[1]
-	npix = im.size[0] * im.size[1]
+def get_rgb(filename, npix):
+    """
+    This gets the RGB values from a given file and saves them in three lists from a given file.
+    :param filename: image file
+    :param npix:  number of pixels
+    :return: r, g, b
+    """
+    # Getting image pixels RGB values
+    im = Image.open(filename)
+    rgb_im = im.convert('RGB')
 
-	return width, height, npix
-	
-#*********************************************************************************#
-#	Function getRGB: This gets the RGB values from a given file and saves     #
-#	them in three lists from a given file.                                    #
-#	Input: file, number of pixels of the file                                 #
-#	Output: r [], g [], b []                                                  #
-#*********************************************************************************#
-def getRGB(filename, npix):
+    # Creating three lists of npix items
+    r = [-1] * npix
+    g = [-1] * npix
+    b = [-1] * npix
 
-	# Getting image pixels RGB values
-	im = Image.open(filename)
-	rgb_im = im.convert('RGB')
+    for y in range(0, im.size[1]):
+        for x in range(0, im.size[0]):
+            # We get the RGB value in each pixel and save each component in an array
+            rpix, gpix, bpix = rgb_im.getpixel((x, y))
+            r[im.size[0] * y + x] = rpix
+            g[im.size[0] * y + x] = gpix
+            b[im.size[0] * y + x] = bpix
 
-	# Creating three lists of npix items
-	r = [-1] * npix 
-	g = [-1] * npix
-	b = [-1] * npix
+    return r, g, b
 
-	for y in range(0, im.size[1]):
-		for x in range(0, im.size[0]):
 
-			# We get the RGB value in each pixel and save each component in an array
-			rpix, gpix, bpix = rgb_im.getpixel((x,y)) 
-			r[im.size[0]*y + x] = rpix
-			g[im.size[0]*y + x] = gpix
-			b[im.size[0]*y + x] = bpix
+def rgb_to_yuv(r, g, b):  # in (0,255) range
+    """
+     This converts three lists (red, blue, green) in their equivalent YUV lists.
+    :param r:
+    :param g:
+    :param b:
+    :return: Y, Cb, Cr
+    """
+    # All of these lists have the same length
+    y = [0] * len(r)
+    cb = [0] * len(r)
+    cr = [0] * len(r)
 
-	return r, g, b
+    # This is just the formula to get YUV from RGB.
+    for i in range(0, len(r)):
+        y[i] = int(0.299 * r[i] + 0.587 * g[i] + 0.114 * b[i])
+        cb[i] = int(128 - 0.168736 * r[i] - 0.331364 * g[i] + 0.5 * b[i])
+        cr[i] = int(128 + 0.5 * r[i] - 0.418688 * g[i] - 0.081312 * b[i])
 
-#***********************************************************************#
-#	Function RGBtoYUV: This converts three lists (red, blue, green) #
-#	in their equivalent YUV lists.                                  #
-#	Input: r [], g [], b []                                         #
-#	Output: y [], cb [], cr []                                      #
-#***********************************************************************#
-def RGBtoYUV(r, g, b): # in (0,255) range
-
-	# All of these lists have the same length
-	y = [0] * len(r) 
-	cb = [0] * len(r) 
-	cr = [0] * len(r)
-
-	# This is just the formula to get YUV from RGB.
-	for i in range(0, len(r)): 		
-		y[i] = int(0.299 * r[i] + 0.587 * g[i] + 0.114 * b[i])
-		cb[i] = int(128 - 0.168736 * r[i] - 0.331364 * g[i] + 0.5 * b[i])
-		cr[i] = int(128 + 0.5 * r[i] - 0.418688 * g[i] - 0.081312 * b[i])
-
-	return y, cb, cr
-
+    return y, cb, cr
