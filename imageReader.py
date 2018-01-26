@@ -48,6 +48,27 @@ def get_rgb(filename, npix):
     return r, g, b
 
 
+def get_yuv(filename):
+    """
+    This gets the YCbCr values from a given file and saves them in three lists from a given file.
+    :param filename: image file
+    :return: y, u, v
+    """
+    # Getting image pixels RGB values
+    im = Image.open(filename)
+    im = im.convert('YCbCr')
+
+    y = []
+    u = []
+    v = []
+
+    for pix in list(im.getdata()):
+        y.append(pix[0])
+        u.append(pix[1])
+        v.append(pix[2])
+
+    return y, u, v
+
 def rgb_to_yuv(r, g, b):  # in (0,255) range
     """
      This converts three lists (red, blue, green) in their equivalent YUV lists.
