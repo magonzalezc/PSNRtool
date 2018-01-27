@@ -34,10 +34,7 @@ if __name__ == '__main__':
         exit(1)
 
     # Getting YUV values
-    original_r, original_g, original_b = get_rgb(original, original_npix)
-    original_y, original_cb, original_cr = rgb_to_yuv(original_r, original_g, original_b)
-
-    encoded_r, encoded_g, encoded_b = get_rgb(encoded, encoded_npix)
-    encoded_y, encoded_cb, encoded_cr = rgb_to_yuv(encoded_r, encoded_g, encoded_b)
+    original_y, original_cb, original_cr = get_yuv(original)
+    encoded_y, encoded_cb, encoded_cr = get_yuv(encoded)
 
     calculate_psnr(original_y, encoded_y, original_cb, encoded_cb, original_cr, encoded_cr, original_npix)
